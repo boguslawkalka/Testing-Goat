@@ -84,6 +84,14 @@ class ListModelTest(TestCase):
         self.assertEqual(list_.name, 'first item')
 
 
+    def test_can_share_with_another_user(self):
+        list_ = List.objects.create()
+        user = User.objects.create(email='a@b.com')
+        list_.shared_with.add('a@b.com')
+        list_in_db = List.objects.get(id=list_.id)
+        self.assertIn(user, list_in_db.shared_with.all())
+
+
     def test_create_new_creates_list_and_first_item(self):
         List.create_new(first_item_text='new item text')
         new_item = Item.objects.first()
